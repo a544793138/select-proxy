@@ -34,8 +34,8 @@ public class CustomProxyServlet extends ProxyServlet {
         final ClassLoader loader = CustomProxyServlet.class.getClassLoader();
         try {
             final SSLContext context = SSLContextBuilder.create()
-                    .loadKeyMaterial(loader.getResource("application-1.pfx"), "123456".toCharArray(), "123456".toCharArray())
-                    .loadTrustMaterial(loader.getResource("caas-ca.jks"), "123456".toCharArray())
+                    .loadKeyMaterial(loader.getResource("client.pfx"), "123456".toCharArray(), "123456".toCharArray())
+                    .loadTrustMaterial(loader.getResource("ca.jks"), "123456".toCharArray())
                     .build();
 
             final PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager(RegistryBuilder.<ConnectionSocketFactory>create()

@@ -29,15 +29,15 @@ tasks {
 
     bootJar {
         dependsOn(":clean")
-        archiveFileName.set("other-portal.jar")
-        mainClass.set("com.mastercard.cme.caas.web.test.Application")
+        archiveFileName.set("select-proxy.jar")
+        mainClass.set("com.tjwoods.Application")
 
-        exclude("application.properties", "ePortal-SAML-token-sample*")
+        exclude("application.properties")
 
         doLast {
             copy {
                 from("src/main/resources")
-                include("application.properties", "ePortal-SAML-token-sample*")
+                include("application.properties")
                 into("build/libs/")
             }
         }
