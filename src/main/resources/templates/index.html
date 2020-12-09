@@ -6,30 +6,43 @@
 </head>
 <body>
     <div>
+        <input id="targetUrl" type="text" placeholder="caas-web 的地址，例如 https://localhost:8081" style="width: 400px;">
         <ul th:each="token:${tokens}">
-            <li><button onclick="chooseUser(event)" th:text="${token.id}" th:value="${token.id}"></button></li>
+            <li><button class="chooseUserBtn" th:text="${token.id}" th:value="${token.id}"></button></li>
         </ul>
     </div>
 </body>
 </html>
 
+<script src="jquery-3.3.1.min.js"></script>
 <script type="text/javascript">
-    function chooseUser(event) {
-        var url = window.location.href + "choose-user/" + event.currentTarget.value;
-        chooseUserAndGoCaas(url);
-    }
 
-    function chooseUserAndGoCaas(url) {
-        console.log(url);
-        var httpRequest = new XMLHttpRequest();
-        httpRequest.open("GET", url, true);
-        httpRequest.send();
-        httpRequest.onreadystatechange = function() {
-            if (httpRequest.status == 200) {
-                window.location.href = window.location.href + "proxy/";
-            } else {
-                alert("选择用户失败.");
-            }
+    $(document).ready(function() {
+        var targetUrl = window.localStorage.targetUrl;
+        if (targetUrl != null || targetUrl != undefined || targetUrl != "") {
+            $("#targetUrl").val(window.localStorage.targetUrl);
         }
-    }
+    });
+
+    $(".chooseUserBtn").click(function() {
+        if ($("#targetUrl").val() == null || $("#targetUrl").val() == "") {
+            alert("请输入 caas-web 的地址！");
+            return;
+        }
+        window.localStorage.targetUrl = $("#targetUrl").val();
+        var url = $(location).attr("href") + "choose-user/" + $(this).val();
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: JSON.stringify({
+                targetUrl: $("#targetUrl").val()
+            }),
+            complete: function() {
+                $(location).attr("href", $(location).attr("href") + "proxy/");
+            },
+            dataType: "json",
+            contentType: "application/json"
+        })
+    });
 </script>

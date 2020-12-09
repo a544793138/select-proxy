@@ -30,7 +30,6 @@ public class ProxyConfig {
     @Bean
     public ServletRegistrationBean proxyServlet(CustomProxyServlet customProxyServlet) {
         ServletRegistrationBean servletRegistrationBean = new ServletRegistrationBean(customProxyServlet, proxyProperties.getServletUrl());
-        servletRegistrationBean.addInitParameter("targetUri", proxyProperties.getTargetUrl());
         // 用于保持 cookie 不变
         servletRegistrationBean.addInitParameter(ProxyServlet.P_PRESERVECOOKIES, "true");
         servletRegistrationBean.addInitParameter(ProxyServlet.P_LOG, String.valueOf(proxyProperties.isLogEnabled()));
