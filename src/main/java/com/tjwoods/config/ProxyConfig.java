@@ -1,7 +1,7 @@
-package com.tjwoods.config;
+package com.mastercard.cme.caas.web.test.config;
 
-import com.tjwoods.token.CustomProxyServlet;
-import com.tjwoods.token.GiveTokenProperties;
+import com.mastercard.cme.caas.web.test.token.CustomProxyServlet;
+import com.mastercard.cme.caas.web.test.token.GiveTokenProperties;
 import org.mitre.dsmiley.httpproxy.ProxyServlet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -10,15 +10,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@EnableConfigurationProperties({ProxyProperties.class, GiveTokenProperties.class})
+@EnableConfigurationProperties({GiveTokenProperties.class})
 public class ProxyConfig {
 
     private final ProxyProperties proxyProperties;
     private final GiveTokenProperties giveTokenProperties;
 
     @Autowired
-    public ProxyConfig(ProxyProperties proxyProperties, GiveTokenProperties giveTokenProperties) {
-        this.proxyProperties = proxyProperties;
+    public ProxyConfig(GiveTokenProperties giveTokenProperties) {
+        this.proxyProperties = new ProxyProperties();
         this.giveTokenProperties = giveTokenProperties;
     }
 
@@ -30,8 +30,8 @@ public class ProxyConfig {
     @Bean
     public ServletRegistrationBean proxyServlet(CustomProxyServlet customProxyServlet) {
         ServletRegistrationBean servletRegistrationBean = new ServletRegistrationBean(customProxyServlet, proxyProperties.getServletUrl());
-        // 用于保持 cookie 不变
         servletRegistrationBean.addInitParameter(ProxyServlet.P_PRESERVECOOKIES, "true");
+        servletRegistrationBean.addInitParameter(ProxyServlet.P_PRESERVEHOST, "true");
         servletRegistrationBean.addInitParameter(ProxyServlet.P_LOG, String.valueOf(proxyProperties.isLogEnabled()));
         return servletRegistrationBean;
     }

@@ -1,4 +1,4 @@
-package com.tjwoods.config;
+package com.mastercard.cme.caas.web.test.config;
 
 public class ProxyProperties {
 

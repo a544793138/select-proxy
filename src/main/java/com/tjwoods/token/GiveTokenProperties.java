@@ -1,4 +1,4 @@
-package com.tjwoods.token;
+package com.mastercard.cme.caas.web.test.token;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
@@ -13,15 +13,15 @@ import java.util.List;
 import java.util.Map;
 
 @Configuration
-@ConfigurationProperties(prefix = "select-proxy.token")
+@ConfigurationProperties(prefix = "other-proto.saml")
 public class GiveTokenProperties {
 
-    private String authHeader;
+    private String authHeader = "MCWSSAML";
 
     private Map<String, String> userIdWithTokenPath = new HashMap<>();
 
-    public List<TokenPojo> getSamlTokens() {
-        List<TokenPojo> result = new ArrayList<>();
+    public List<SamlTokenPojo> getSamlTokens() {
+        List<SamlTokenPojo> result = new ArrayList<>();
         for (String userId : userIdWithTokenPath.keySet()) {
             final String tokenPath = userIdWithTokenPath.get(userId);
 
@@ -36,7 +36,7 @@ public class GiveTokenProperties {
                 byte[] buffer = new byte[fileInputStream.available()];
                 fileInputStream.read(buffer);
                 final String token = new String(buffer);
-                result.add(new TokenPojo(userId, token));
+                result.add(new SamlTokenPojo(userId, token));
             } catch (Exception e) {
                 throw new IllegalArgumentException("Cannot find token", e);
             }
